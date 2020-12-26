@@ -11,7 +11,9 @@
 #include <QNetworkCookie>
 #include <QLineEdit>
 #include <QInputDialog>
-
+#include <QNetworkSession>
+#include <QMessageBox>
+#include <QNetworkCookieJar>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,11 +35,17 @@ private slots:
 
     void on_pushButton_add_clicked();
 
-private:
-    QJsonParseError jsonError;
-    QJsonDocument document;
-    Ui::MainWindow *ui;
-    QNetworkAccessManager *manager;
+    void on_pushButton_del_clicked();
 
+private:
+    Ui::MainWindow *ui;
+
+    QNetworkAccessManager *manager;     //新建session
+
+    QByteArray token = "";
+    QByteArray user = "user_";
+    QByteArray post(QString url, QByteArray data, const char* type);
+    QByteArray get(QString url);
+    void updatetoken(QNetworkReply* reply);
 };
 #endif // MAINWINDOW_H

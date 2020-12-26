@@ -15,8 +15,10 @@ int main(int argc, char *argv[])
     qDebug()<<QSslSocket::supportsSsl();
     qDebug()<<QSslSocket::sslLibraryBuildVersionString();
     */
+
     MainWindow w;
     w.show();
+
     return a.exec();
 
 }
