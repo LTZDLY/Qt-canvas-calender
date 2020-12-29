@@ -1,13 +1,12 @@
-#include "mainwindow.h"
-
 #include <QApplication>
 #include <QDebug>
-#include <QNetworkRequest>
-#include <QNetworkReply>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 
-int main(int argc, char *argv[])
-{
+#include "mainwindow.h"
+
+int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     qDebug() << "testDebug";
@@ -20,5 +19,4 @@ int main(int argc, char *argv[])
     w.show();
 
     return a.exec();
-
 }

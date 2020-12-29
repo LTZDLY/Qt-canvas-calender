@@ -1,34 +1,33 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QJsonObject>
-#include <QJsonArray>
 #include <qjsondocument.h>
+
 #include <QFile>
-#include <QNetworkCookie>
-#include <QLineEdit>
 #include <QInputDialog>
-#include <QNetworkSession>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QLineEdit>
+#include <QMainWindow>
 #include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkCookie>
 #include <QNetworkCookieJar>
+#include <QNetworkReply>
+#include <QNetworkSession>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui {
+class MainWindow;
+}
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
-public:
-    QString tjGetCode();
+   public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-private slots:
-    void readData(QNetworkReply *reply);
-
+   private slots:
     void on_pushButton_clicked();
 
     void on_calendarWidget_clicked(const QDate &date);
@@ -37,15 +36,19 @@ private slots:
 
     void on_pushButton_del_clicked();
 
-private:
+   private:
     Ui::MainWindow *ui;
 
-    QNetworkAccessManager *manager;     //新建session
+    QNetworkAccessManager *manager;  //新建session
 
     QByteArray token = "";
-    QByteArray user = "user_";
-    QByteArray post(QString url, QByteArray data, const char* type);
+    QByteArray user = "user_234063";
+    QByteArray post(QString url, QByteArray data, const char *type);
     QByteArray get(QString url);
-    void updatetoken(QNetworkReply* reply);
+
+    QJsonObject json;
+
+    void updatetoken(QNetworkReply *reply);
+    QJsonObject format(QByteArray data);
 };
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H
