@@ -46,7 +46,7 @@ class MainWindow : public QMainWindow {
     QByteArray post(QString url, QByteArray data, const char *type);
     QByteArray get(QString url);
 
-    QJsonObject json;
+    QJsonObject json;       //所登录用户的所有ddl信息
 
     void updatetoken(QNetworkReply *reply);
     QJsonObject format(QByteArray data);

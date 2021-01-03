@@ -82,10 +82,14 @@ void MainWindow::on_pushButton_clicked() {
         get("http://canvas.tongji.edu.cn/api/v1/planner/"
             "items?start_date=2020-01-01T16:00:00.000Z&per_page=100");
     qDebug() << responseByte;
-    json = format(responseByte);
+    this->json = format(responseByte);
 }
 
-void MainWindow::on_calendarWidget_clicked(const QDate &date) {}
+void MainWindow::on_calendarWidget_clicked(const QDate &date) {
+    qDebug() << date.toString("yyyy-MM-dd");
+    auto a = this->json[date.toString("yyyy-MM-dd")].toArray();
+    qDebug() << a;
+}
 
 void MainWindow::on_pushButton_add_clicked() {
     bool ok;
@@ -200,7 +204,10 @@ QJsonObject MainWindow::format(QByteArray data) {
     for(int i = 0; i < list.count(); i++) {
         QJsonObject temp;
         QVariantMap map = list[i].toMap();
-        QString date = map["plannable_date"].toString().left(10);
+        auto time = QDateTime::fromString(map["plannable_date"].toString(), "yyyy-MM-ddThh:mm:ssZ");
+        time.setTimeSpec(Qt::UTC);
+        QDateTime localTime = time.toLocalTime();
+        QString date = localTime.toString("yyyy-MM-dd");
         qDebug() << date;
         temp = temp.fromVariantMap(map);
         if (m.contains(date))
