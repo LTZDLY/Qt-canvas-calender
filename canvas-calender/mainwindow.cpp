@@ -89,6 +89,25 @@ void MainWindow::on_calendarWidget_clicked(const QDate &date) {
     qDebug() << date.toString("yyyy-MM-dd");
     auto a = this->json[date.toString("yyyy-MM-dd")].toArray();
     qDebug() << a;
+    if(a.size()){
+        ui->comboBox->clear();
+        for(int i=0;i<a.size();i++){
+            auto context_name=a[i].toObject()["context_name"].toString();
+            ui->comboBox->addItem(context_name);
+        }
+        auto index=ui->comboBox->currentIndex();
+        auto title=a[index].toObject()["plannable"].toObject()["title"].toString();
+        ui->label_title->setText(title);
+        auto ddl_time=a[index].toObject()["plannable_date"].toString();
+        auto time = QDateTime::fromString(ddl_time, "yyyy-MM-ddThh:mm:ssZ");
+        time.setTimeSpec(Qt::UTC);
+        QDateTime ddl = time.toLocalTime();
+        ui->label_ddl->setText(ddl.toString("yyyy-MM-dd hh:mm:ss"));
+    }else{
+        ui->comboBox->clear();
+        ui->label_ddl->clear();
+        ui->label_title->clear();
+    }
 }
 
 void MainWindow::on_pushButton_add_clicked() {
