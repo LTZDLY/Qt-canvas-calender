@@ -12,13 +12,16 @@ INCLUDEPATH += \
     C:/OpenSSL-Win64
 
 SOURCES += \
+    login.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    login.h \
     mainwindow.h
 
 FORMS += \
+    login.ui \
     mainwindow.ui
 
 

@@ -27,8 +27,15 @@ class MainWindow : public QMainWindow {
    public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void set_user_ID(QString id){
+        this->Ecom_User_ID=id;
+    }
+    void set_passwd(QString pswd){
+        this->Ecom_Password=pswd;
+    }
+
    private slots:
-    void on_pushButton_clicked();
+    //void on_pushButton_clicked();
 
     void on_calendarWidget_clicked(const QDate &date);
 
@@ -47,8 +54,15 @@ class MainWindow : public QMainWindow {
     QByteArray get(QString url);
 
     QJsonObject json;       //所登录用户的所有ddl信息
+    QString Ecom_User_ID;
+    QString Ecom_Password;
+
+
 
     void updatetoken(QNetworkReply *reply);
     QJsonObject format(QByteArray data);
+
+private slots:
+    void receivelogin(QString,QString);
 };
 #endif  // MAINWINDOW_H

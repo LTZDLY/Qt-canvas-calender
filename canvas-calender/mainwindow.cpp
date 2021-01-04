@@ -13,7 +13,8 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked() {
+
+void MainWindow::receivelogin(QString ID,QString pswd){
     QNetworkRequest requestInfo;  //设置请求信息
     QEventLoop eventLoop;         //建立阻断事件
     QNetworkReply *reply;         //存储返回信息
@@ -40,12 +41,19 @@ void MainWindow::on_pushButton_clicked() {
     QJsonObject object = document.object();
     QJsonValue value = object.value("ans");
     QString Ecom_code = value.toString();
-    QString Ecom_User_ID = "";
-    QString Ecom_Password = "";
+
     QByteArray b;
     b.append("option=credential");
-    b.append("&Ecom_User_ID=" + Ecom_User_ID.toUtf8());
-    b.append("&Ecom_Password=" + Ecom_Password.toUtf8());
+
+    this->Ecom_User_ID=ID;
+    this->Ecom_Password=pswd;
+    qDebug()<<this->Ecom_User_ID;
+    qDebug()<<this->Ecom_Password;
+
+    b.append("&Ecom_User_ID=" + this->Ecom_User_ID.toUtf8());
+    b.append("&Ecom_Password=" + this->Ecom_Password.toUtf8());
+
+
     b.append("&Ecom_code=" + Ecom_code.toUtf8());
 
     post("https://ids.tongji.edu.cn:8443/nidp/app/login", b,
@@ -83,6 +91,7 @@ void MainWindow::on_pushButton_clicked() {
             "items?start_date=2020-01-01T16:00:00.000Z&per_page=100");
     qDebug() << responseByte;
     this->json = format(responseByte);
+    this->show();
 }
 
 void MainWindow::on_calendarWidget_clicked(const QDate &date) {

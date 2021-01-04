@@ -5,6 +5,7 @@
 #include <QNetworkRequest>
 
 #include "mainwindow.h"
+#include "login.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
@@ -15,8 +16,10 @@ int main(int argc, char *argv[]) {
     qDebug()<<QSslSocket::sslLibraryBuildVersionString();
     */
 
+    login l;
+    l.show();
     MainWindow w;
-    w.show();
+    QObject::connect(&l,SIGNAL(showmain(QString,QString)),&w,SLOT(receivelogin(QString,QString)));
 
     return a.exec();
 }
