@@ -127,7 +127,6 @@ void MainWindow::on_pushButton_add_clicked() {
 
     auto date = ui->calendarWidget->selectedDate();
     qDebug() << text.toUtf8();
-    ui->textEdit->setText(text);
     QString event_title = text;
     QString event_start = "";
     QString event_end = "";
