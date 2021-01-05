@@ -95,8 +95,10 @@ void MainWindow::receivelogin(QString ID,QString pswd){
 }
 
 void MainWindow::on_calendarWidget_clicked(const QDate &date) {
-    qDebug() << date.toString("yyyy-MM-dd");
+    this->select_date=date.toString("yyyy-MM-dd");
     this->selected_day_json=this->json[date.toString("yyyy-MM-dd")].toArray();
+    qDebug()<<this->select_date;
+    qDebug()<<this->selected_day_json;
     if(selected_day_json.size()){
         ui->comboBox->clear();
         for(int i=0;i<selected_day_json.size();i++){
@@ -117,6 +119,8 @@ void MainWindow::on_pushButton_add_clicked() {
     if (!ok || text.isEmpty()) return;
 
     auto date = ui->calendarWidget->selectedDate();
+
+
     qDebug() << text.toUtf8();
     QString event_title = text;
     QString event_start = "";
@@ -125,6 +129,25 @@ void MainWindow::on_pushButton_add_clicked() {
     QString _method = "POST";
     date.setDate(date.year(), date.month(), date.day() - 1);
     event_start = event_end = date.toString("yyyy-MM-ddT16%3A00%3A00Z");
+
+
+    QJsonObject temp;
+    temp.insert("context_name","蓝盛霖");
+    temp.insert("context_type","User");
+    QString d=date.toString("yyyy-MM-dd");
+    d=d+"T16:00:00Z";
+    temp.insert("plannable_date",d);
+    QJsonObject pl;
+    pl.insert("title",text);
+    temp.insert("plannable",QJsonValue(pl));
+    qDebug()<<temp;
+    QJsonValueRef ref=this->json.find(this->select_date).value();
+    QJsonArray arr=ref.toArray();
+    arr.append(temp);
+    ref=arr;
+    qDebug()<<arr;
+
+
 
     QByteArray byte;
     byte.append("calendar_event%5Btitle%5D=" + event_title.toUtf8());
@@ -186,9 +209,8 @@ void MainWindow::on_pushButton_del_clicked() {
         auto c = QMessageBox::question(this,
         tr("删除ddl"),QString(tr("确认删除ddl?")),QMessageBox::Yes |
         QMessageBox::No); if (c == QMessageBox::No) return;
-        qDebug()<<this->selected_day_json[index].toObject()["plannable_id"];
+
         QString plannable_id=QString::number(this->selected_day_json[index].toObject()["plannable_id"].toDouble());
-        qDebug()<<plannable_id;
 
         QString url="http://canvas.tongji.edu.cn/api/v1/calendar_events/"+plannable_id;
         QByteArray byte;
@@ -196,6 +218,11 @@ void MainWindow::on_pushButton_del_clicked() {
         byte.append("&authenticity_token="+token);
         post(url,byte,"application/x-www-form-urlencoded");
 
+        QJsonValueRef ref=json.find(this->select_date).value();
+        QJsonArray arr=ref.toArray();
+        arr.removeAt(index);
+        ref=arr;
+        this->selected_day_json=this->json[this->select_date].toArray();
     }
 }
 

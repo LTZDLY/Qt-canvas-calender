@@ -57,6 +57,7 @@ class MainWindow : public QMainWindow {
     QString Ecom_User_ID;
     QString Ecom_Password;
     QJsonArray selected_day_json;
+    QString select_date;
 
 
 
