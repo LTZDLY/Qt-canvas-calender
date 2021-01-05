@@ -178,27 +178,6 @@ QByteArray MainWindow::get(QString url) {
 }
 
 void MainWindow::on_pushButton_del_clicked() {
-    /*
-    auto c = QMessageBox::question(this,
-    tr("删除ddl"),QString(tr("确认删除ddl?")),QMessageBox::Yes |
-    QMessageBox::No); if (c == QMessageBox::No) return;
-
-    QByteArray byte;
-
-    byte.append("calendar_event%5Btitle%5D=" + event_title.toUtf8());
-    byte.append("&calendar_event%5Bstart_at%5D=" + event_start.toUtf8());
-    byte.append("&calendar_event%5Bend_at%5D=" + event_end.toUtf8());
-    byte.append("&calendar_event%5Blocation_name%5D=" + event_local.toUtf8());
-    byte.append("&calendar_event%5Bcontext_code%5D=user_234063");
-    byte.append("&authenticity_token=" + token.toUtf8());
-
-    byte =
-    "authenticity_token=asDk6ktTfaVnKEiyKXo5lAqKvXWADTdoRnjjy9TiAek4q9WFHh8T3AFNI8FbVU%2FgYcPJJ6smWD9pU5WPpNFKqA%3D%3D&_method=DELETE";
-
-    QString url = "http://canvas.tongji.edu.cn/api/v1/calendar_events/1923";
-    post(url, byte);
-    */
-
     auto index=ui->comboBox->currentIndex();
     if(this->selected_day_json.size()==0||selected_day_json[index].toObject()["context_type"].toString()!="User"){
         auto box=QMessageBox::warning(this,tr("错误"),QString(tr("该日无ddl或无法删除当前ddl")),QMessageBox::Ok);
@@ -207,7 +186,9 @@ void MainWindow::on_pushButton_del_clicked() {
         auto c = QMessageBox::question(this,
         tr("删除ddl"),QString(tr("确认删除ddl?")),QMessageBox::Yes |
         QMessageBox::No); if (c == QMessageBox::No) return;
-        QString plannable_id=this->selected_day_json[index].toObject()["plannable_id"].toString();
+        qDebug()<<this->selected_day_json[index].toObject()["plannable_id"];
+        QString plannable_id=QString::number(this->selected_day_json[index].toObject()["plannable_id"].toDouble());
+        qDebug()<<plannable_id;
 
         QString url="http://canvas.tongji.edu.cn/api/v1/calendar_events/"+plannable_id;
         QByteArray byte;
