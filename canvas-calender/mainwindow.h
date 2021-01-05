@@ -56,6 +56,7 @@ class MainWindow : public QMainWindow {
     QJsonObject json;       //所登录用户的所有ddl信息
     QString Ecom_User_ID;
     QString Ecom_Password;
+    QJsonArray selected_day_json;
 
 
 
@@ -64,5 +65,6 @@ class MainWindow : public QMainWindow {
 
 private slots:
     void receivelogin(QString,QString);
+    void on_comboBox_currentIndexChanged(int index);
 };
 #endif  // MAINWINDOW_H

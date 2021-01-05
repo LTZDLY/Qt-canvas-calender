@@ -96,22 +96,13 @@ void MainWindow::receivelogin(QString ID,QString pswd){
 
 void MainWindow::on_calendarWidget_clicked(const QDate &date) {
     qDebug() << date.toString("yyyy-MM-dd");
-    auto a = this->json[date.toString("yyyy-MM-dd")].toArray();
-    qDebug() << a;
-    if(a.size()){
+    this->selected_day_json=this->json[date.toString("yyyy-MM-dd")].toArray();
+    if(selected_day_json.size()){
         ui->comboBox->clear();
-        for(int i=0;i<a.size();i++){
-            auto context_name=a[i].toObject()["context_name"].toString();
+        for(int i=0;i<selected_day_json.size();i++){
+            auto context_name=selected_day_json[i].toObject()["context_name"].toString();
             ui->comboBox->addItem(context_name);
         }
-        auto index=ui->comboBox->currentIndex();
-        auto title=a[index].toObject()["plannable"].toObject()["title"].toString();
-        ui->label_title->setText(title);
-        auto ddl_time=a[index].toObject()["plannable_date"].toString();
-        auto time = QDateTime::fromString(ddl_time, "yyyy-MM-ddThh:mm:ssZ");
-        time.setTimeSpec(Qt::UTC);
-        QDateTime ddl = time.toLocalTime();
-        ui->label_ddl->setText(ddl.toString("yyyy-MM-dd hh:mm:ss"));
     }else{
         ui->comboBox->clear();
         ui->label_ddl->clear();
@@ -141,6 +132,7 @@ void MainWindow::on_pushButton_add_clicked() {
     byte.append("&calendar_event%5Bend_at%5D=" + event_end.toUtf8());
     byte.append("&calendar_event%5Blocation_name%5D=" + event_local.toUtf8());
     byte.append("&calendar_event%5Bcontext_code%5D=" + user);
+    byte.append("&_method=POST");
     byte.append("&authenticity_token=" + token);
     QString url = "http://canvas.tongji.edu.cn/api/v1/calendar_events";
     post(url, byte, "application/x-www-form-urlencoded");
@@ -206,6 +198,24 @@ void MainWindow::on_pushButton_del_clicked() {
     QString url = "http://canvas.tongji.edu.cn/api/v1/calendar_events/1923";
     post(url, byte);
     */
+
+    auto index=ui->comboBox->currentIndex();
+    if(this->selected_day_json.size()==0||selected_day_json[index].toObject()["context_type"].toString()!="User"){
+        auto box=QMessageBox::warning(this,tr("错误"),QString(tr("该日无ddl或无法删除当前ddl")),QMessageBox::Ok);
+    }
+    else{
+        auto c = QMessageBox::question(this,
+        tr("删除ddl"),QString(tr("确认删除ddl?")),QMessageBox::Yes |
+        QMessageBox::No); if (c == QMessageBox::No) return;
+        QString plannable_id=this->selected_day_json[index].toObject()["plannable_id"].toString();
+
+        QString url="http://canvas.tongji.edu.cn/api/v1/calendar_events/"+plannable_id;
+        QByteArray byte;
+        byte.append("_method=DELETE");
+        byte.append("&authenticity_token="+token);
+        post(url,byte,"application/x-www-form-urlencoded");
+
+    }
 }
 
 void MainWindow::updatetoken(QNetworkReply *reply) {
@@ -251,4 +261,17 @@ QJsonObject MainWindow::format(QByteArray data) {
         json.insert(i.key(), i.value());
     }
     return json;
+}
+
+void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+    if(index>=0){
+        auto title=this->selected_day_json[index].toObject()["plannable"].toObject()["title"].toString();
+        ui->label_title->setText(title);
+        auto ddl_time=this->selected_day_json[index].toObject()["plannable_date"].toString();
+        auto time = QDateTime::fromString(ddl_time, "yyyy-MM-ddThh:mm:ssZ");
+        time.setTimeSpec(Qt::UTC);
+        QDateTime ddl = time.toLocalTime();
+        ui->label_ddl->setText(ddl.toString("yyyy-MM-dd hh:mm:ss"));
+    }
 }
