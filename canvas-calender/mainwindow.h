@@ -27,20 +27,10 @@ class MainWindow : public QMainWindow {
    public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void set_user_ID(QString id){
-        this->Ecom_User_ID=id;
-    }
-    void set_passwd(QString pswd){
-        this->Ecom_Password=pswd;
-    }
 
    private slots:
-    //void on_pushButton_clicked();
-
     void on_calendarWidget_clicked(const QDate &date);
-
     void on_pushButton_add_clicked();
-
     void on_pushButton_del_clicked();
 
    private:
@@ -49,23 +39,20 @@ class MainWindow : public QMainWindow {
     QNetworkAccessManager *manager;  //新建session
 
     QByteArray token = "";
-    QByteArray user = "user_234063";
-    QByteArray post(QString url, QByteArray data, const char *type);
-    QByteArray get(QString url);
+    QByteArray user = "";
+    QByteArray name = "";
 
-    QJsonObject json;       //所登录用户的所有ddl信息
-    QString Ecom_User_ID;
-    QString Ecom_Password;
+    QJsonObject json;  //所登录用户的所有ddl信息
     QJsonArray selected_day_json;
     QString select_date;
 
-
-
-    void updatetoken(QNetworkReply *reply);
+    QByteArray post(QString url, QByteArray data, const char *type);
+    QByteArray get(QString url);
     QJsonObject format(QByteArray data);
+    void updatetoken(QNetworkReply *reply);
 
-private slots:
-    void receivelogin(QString,QString);
+   private slots:
+    void receivelogin(QString, QString);
     void on_comboBox_currentIndexChanged(int index);
 };
 #endif  // MAINWINDOW_H

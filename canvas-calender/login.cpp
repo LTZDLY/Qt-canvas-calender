@@ -1,28 +1,20 @@
 #include "login.h"
+
 #include "ui_login.h"
 
-login::login(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::login)
-{
+login::login(QWidget* parent) : QDialog(parent), ui(new Ui::login) {
     ui->setupUi(this);
-    ui->lineEdit->setEchoMode(QLineEdit::Password);
+    ui->lineEdit_password->setEchoMode(QLineEdit::Password);
 }
 
-login::~login()
-{
-    delete ui;
-}
+login::~login() { delete ui; }
 
-void login::on_pushButton_clicked()
-{
+void login::on_pushButton_clicked() {
     this->hide();
-    emit showmain(ui->textEdit->toPlainText(),ui->lineEdit->text());
+    emit showmain(ui->lineEdit_id->text(), ui->lineEdit_password->text());
 }
 
-
-void login::on_pushButton_2_clicked()
-{
+void login::on_pushButton_2_clicked() {
     QApplication* app;
     app->exit(0);
 }

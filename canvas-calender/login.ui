@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>登录</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -26,17 +26,7 @@
     <string>Login</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="textEdit">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>90</y>
-     <width>131</width>
-     <height>31</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="lineEdit_password">
    <property name="geometry">
     <rect>
      <x>170</x>
@@ -96,6 +86,16 @@
    </property>
    <property name="text">
     <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_id">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>90</y>
+     <width>131</width>
+     <height>31</height>
+    </rect>
    </property>
   </widget>
  </widget>

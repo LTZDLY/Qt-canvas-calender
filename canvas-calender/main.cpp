@@ -1,25 +1,19 @@
 #include <QApplication>
-#include <QDebug>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
-#include "mainwindow.h"
 #include "login.h"
+#include "mainwindow.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
-    qDebug() << "testDebug";
-    /*
-    qDebug()<<QSslSocket::supportsSsl();
-    qDebug()<<QSslSocket::sslLibraryBuildVersionString();
-    */
-
     login l;
     l.show();
     MainWindow w;
-    QObject::connect(&l,SIGNAL(showmain(QString,QString)),&w,SLOT(receivelogin(QString,QString)));
+    QObject::connect(&l, SIGNAL(showmain(QString, QString)), &w,
+                     SLOT(receivelogin(QString, QString)));
 
     return a.exec();
 }
