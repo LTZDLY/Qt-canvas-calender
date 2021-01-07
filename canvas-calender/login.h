@@ -27,7 +27,6 @@ class login : public QDialog {
 
    private:
     Ui::login *ui;
-
     QNetworkAccessManager *manager;  //新建session
 };
 

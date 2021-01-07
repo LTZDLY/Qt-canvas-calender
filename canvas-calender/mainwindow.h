@@ -30,8 +30,10 @@ class MainWindow : public QMainWindow {
 
    private slots:
     void on_calendarWidget_clicked(const QDate &date);
+    void on_comboBox_currentIndexChanged(int index);
     void on_pushButton_add_clicked();
     void on_pushButton_del_clicked();
+    void receivelogin(QString, QString);
 
    private:
     Ui::MainWindow *ui;
@@ -50,9 +52,5 @@ class MainWindow : public QMainWindow {
     QByteArray get(QString url);
     QJsonObject format(QByteArray data);
     void updatetoken(QNetworkReply *reply);
-
-   private slots:
-    void receivelogin(QString, QString);
-    void on_comboBox_currentIndexChanged(int index);
 };
 #endif  // MAINWINDOW_H

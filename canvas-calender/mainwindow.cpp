@@ -80,10 +80,9 @@ void MainWindow::receivelogin(QString id, QString pswd) {
     if (s.contains("errors")) {
         QMessageBox::critical(
             this, tr("错误"),
-            QString(tr("登录失败，请关闭程序并检查输入的学号密码是否正确。")),
+            QString(tr("登录失败，请检查输入的学号密码是否正确。")),
             QMessageBox::Ok);
-            QApplication* app;
-            app->exit(0);
+        QApplication::exit(0);
     } else {
         this->json = format(responseByte);
         responseByte = get("http://canvas.tongji.edu.cn");
@@ -93,8 +92,9 @@ void MainWindow::receivelogin(QString id, QString pswd) {
         QStringList listssub = listsub[1].split("\",\"avatar_image_url");
         user = listsub[0].toUtf8();
         name = listssub[0].toUtf8();
+        this->show();
+        on_calendarWidget_clicked(QDate::currentDate());
     }
-    this->show();
 }
 
 void MainWindow::on_calendarWidget_clicked(const QDate &date) {
@@ -111,6 +111,12 @@ void MainWindow::on_calendarWidget_clicked(const QDate &date) {
         ui->comboBox->clear();
         ui->label_ddl->clear();
         ui->label_title->clear();
+        ui->label_title->setText("noddl, tql");
+        auto format = ui->calendarWidget->dateTextFormat(
+            ui->calendarWidget->selectedDate());
+        format.setBackground(QColor("#FFFFFF"));
+        ui->calendarWidget->setDateTextFormat(
+            ui->calendarWidget->selectedDate(), format);
     }
 }
 
@@ -160,6 +166,13 @@ void MainWindow::on_pushButton_add_clicked() {
     QJsonArray arr = ref.toArray();
     arr.append(temp);
     ref = arr;
+
+    auto format =
+        ui->calendarWidget->dateTextFormat(ui->calendarWidget->selectedDate());
+    format.setBackground(QColor("#00FFFF"));
+    ui->calendarWidget->setDateTextFormat(ui->calendarWidget->selectedDate(),
+                                          format);
+
     on_calendarWidget_clicked(ui->calendarWidget->selectedDate());
 }
 
@@ -194,6 +207,7 @@ void MainWindow::on_pushButton_del_clicked() {
         ref = arr;
         this->selected_day_json = this->json[this->select_date].toArray();
     }
+
     on_calendarWidget_clicked(ui->calendarWidget->selectedDate());
 }
 
@@ -226,6 +240,11 @@ QJsonObject MainWindow::format(QByteArray data) {
         QDateTime localTime = time.toLocalTime();
         QString date = localTime.toString("yyyy-MM-dd");
         temp = temp.fromVariantMap(map);
+
+        auto format = ui->calendarWidget->dateTextFormat(localTime.date());
+        format.setBackground(QColor("#00FFFF"));
+        ui->calendarWidget->setDateTextFormat(localTime.date(), format);
+
         if (m.contains(date))
             m[date].append(temp);
         else {
