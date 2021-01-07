@@ -82,6 +82,8 @@ void MainWindow::receivelogin(QString id, QString pswd) {
             this, tr("错误"),
             QString(tr("登录失败，请关闭程序并检查输入的学号密码是否正确。")),
             QMessageBox::Ok);
+            QApplication* app;
+            app->exit(0);
     } else {
         this->json = format(responseByte);
         responseByte = get("http://canvas.tongji.edu.cn");
